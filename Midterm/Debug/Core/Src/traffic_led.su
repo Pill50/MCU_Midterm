@@ -1,0 +1,4 @@
+traffic_led.c:28:6:LED_TRAFFIC_INIT	8	static
+traffic_led.c:36:6:LED_TRAFFIC_LOAD_BUFFER	4	static
+traffic_led.c:47:6:LED_TRAFFIC_STORE_BUFFER	16	static
+traffic_led.c:119:6:LED_TRAFFIC_RUN	4	static
