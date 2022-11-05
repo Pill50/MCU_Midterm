@@ -8,7 +8,6 @@
 #include "output_processing.h"
 #include "global.h"
 
-int counter;
 static uint8_t button_flag[3] = {0,0,0};
 
 void fsm_simple_buttons_run (void){
@@ -18,31 +17,19 @@ void fsm_simple_buttons_run (void){
 			counter = 0;
 			clearLED();
 			setLED7Timer(1000);
-			setTimer(10000);
 			break;
 		case _RESET:
 			// LED7 DISPLAY
 			if(LED7_flag == 1) {
-				displaySeg7(counter);
+				display7SEG(counter);
 				setLED7Timer(1000);
-			}
-			// BUTTON_RESET PRESS
-			if (is_button_pressed(0)){
-				if(button_flag[0] == 0) {
-					button_flag[0] = 1;
-					counter = 0;
-					status = _RESET;
-					setTimer(10000);
-				}
-			} else {
-				button_flag[0] = 0;
 			}
 			// BUTTON_INC PRESS
 			if (is_button_pressed(1)){
 				if(button_flag[1] == 0) {
 					button_flag[1] = 1;
 					counter = (counter + 1) % 10;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _INC;
 					setTimer(10000);
 				}
@@ -55,24 +42,18 @@ void fsm_simple_buttons_run (void){
 					button_flag[2] = 1;
 					counter--;
 					if(counter < 0) counter = 9;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _DEC;
 					setTimer(10000);
 				}
 			} else {
 				button_flag[2] = 0;
 			}
-			// IF DON'T DO ANYTHING AFTER 10S
-			if (timer0_flag == 1){
-				status = _AUTO_DEC;
-				displaySeg7(counter);
-				setTimer(10000);
-			}
 			break;
 		case _INC:
 			// LED7 DISPLAY
 			if(LED7_flag == 1) {
-				displaySeg7(counter);
+				display7SEG(counter);
 				setLED7Timer(1000);
 			}
 			// BUTTON_RESET PRESS
@@ -80,7 +61,7 @@ void fsm_simple_buttons_run (void){
 				if(button_flag[0] == 0) {
 					button_flag[0] = 1;
 					counter = 0;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _RESET;
 					setTimer(10000);
 				}
@@ -93,16 +74,17 @@ void fsm_simple_buttons_run (void){
 				if(is_button_pressed_3s(1)) {
 					if(longpress_flag == 1) {
 						counter = (counter + 1) % 9;
-						displaySeg7(counter);
+						display7SEG(counter);
 						setLongpressTimer(1000);
 					}
 				}
 				// NORMAL PRESS
 				if(button_flag[1] == 0) {
 					counter = (counter + 1) % 10;
-					displaySeg7(counter);
+					display7SEG(counter);
 					button_flag[1] = 1;
 				}
+				setTimer(10000);
 			} else {
 				button_flag[1] = 0;
 			}
@@ -112,7 +94,7 @@ void fsm_simple_buttons_run (void){
 					button_flag[2] = 1;
 					counter--;
 					if(counter < 0) counter = 9;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _DEC;
 					setTimer(10000);
 				}
@@ -120,16 +102,16 @@ void fsm_simple_buttons_run (void){
 				button_flag[2] = 0;
 			}
 			// SET_TIMER 10S IF DON'T PRESS
-			if (timer0_flag == 1){
+			if (timeout_flag == 1){
 				status = _AUTO_DEC;
-				displaySeg7(counter);
+				display7SEG(counter);
 				setTimer(1000);
 			}
 			break;
 		case _DEC:
 			// LED7 DISPLAY
 			if(LED7_flag == 1) {
-				displaySeg7(counter);
+				display7SEG(counter);
 				setLED7Timer(1000);
 			}
 			// BUTTON_RESET PRESS
@@ -137,7 +119,7 @@ void fsm_simple_buttons_run (void){
 				if(button_flag[0] == 0) {
 					button_flag[0] = 1;
 					counter = 0;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _RESET;
 					setTimer(10000);
 				}
@@ -149,7 +131,7 @@ void fsm_simple_buttons_run (void){
 				if(button_flag[1] == 0) {
 					button_flag[1] = 1;
 					counter = (counter + 1) % 10;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _INC;
 					setTimer(10000);
 				}
@@ -163,7 +145,7 @@ void fsm_simple_buttons_run (void){
 					if(longpress_flag == 1) {
 						counter--;
 						if(counter < 0) counter = 9;
-						displaySeg7(counter);
+						display7SEG(counter);
 						setLongpressTimer(1000);
 					}
 				}
@@ -171,16 +153,17 @@ void fsm_simple_buttons_run (void){
 				if(button_flag[2] == 0) {
 					counter--;
 					if(counter < 0) counter = 9;
-					displaySeg7(counter);
+					display7SEG(counter);
 					button_flag[2] = 1;
 				}
+				setTimer(10000);
 			} else {
 				button_flag[2] = 0;
 			}
 			// SET_TIMER 10S IF DON'T PRESS
-			if (timer0_flag == 1){
+			if (timeout_flag == 1){
 				status = _AUTO_DEC;
-				displaySeg7(counter);
+				display7SEG(counter);
 				setTimer(10000);
 			}
 			break;
@@ -189,15 +172,27 @@ void fsm_simple_buttons_run (void){
 			if(LED7_flag == 1) {
 				counter--;
 				if(counter < 0) counter = 0;
-				displaySeg7(counter);
+				display7SEG(counter);
 				setLED7Timer(1000);
+			}
+			// BUTTON_RESET PRESS
+			if (is_button_pressed(0)){
+				if(button_flag[0] == 0) {
+					button_flag[0] = 1;
+					counter = 0;
+					display7SEG(counter);
+					status = _RESET;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[0] = 0;
 			}
 			// BUTTON_INC PRESS
 			if (is_button_pressed(1)){
 				if(button_flag[1] == 0) {
 					button_flag[1] = 1;
 					counter = (counter + 1) % 10;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _INC;
 					setTimer(10000);
 				}
@@ -210,15 +205,14 @@ void fsm_simple_buttons_run (void){
 					button_flag[2] = 1;
 					counter--;
 					if(counter < 0) counter = 9;
-					displaySeg7(counter);
+					display7SEG(counter);
 					status = _DEC;
 					setTimer(10000);
 				}
 			} else {
 				button_flag[2] = 0;
 			}
-			if(timer0_flag == 1) {
-				status = _AUTO_DEC;
+			if(timeout_flag == 1) {
 				setTimer(1000);
 			}
 			break;

@@ -8,12 +8,13 @@
 #ifndef INC_GLOBAL_H_
 #define INC_GLOBAL_H_
 
-#define INIT 	1
-#define _RESET  2
-#define _INC  	3
-#define _DEC  	4
+#define INIT 		1
+#define _RESET  	2
+#define _INC  		3
+#define _DEC  		4
 #define _AUTO_DEC  	5
 
 extern int status;
+extern int counter;
 
 #endif /* INC_GLOBAL_H_ */

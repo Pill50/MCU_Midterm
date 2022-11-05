@@ -10,7 +10,7 @@
 
 #define TIMER_CYCLE 10;
 
-extern int timer0_flag;
+extern int timeout_flag;
 extern int blink_flag;
 extern int longpress_flag;
 extern int LED7_flag;

@@ -9,6 +9,6 @@
 #define INC_LED_DISPLAY_H_
 
 void clearLED();
-void displaySeg7(int num);
+void display7SEG(int num);
 
 #endif /* INC_LED_DISPLAY_H_ */

@@ -19,7 +19,7 @@ void clearLED() {
 }
 
 // Display LED7
-void displaySeg7(int num){
+void display7SEG(int num){
 	clearLED();
 	switch(num){
 		case 0:{

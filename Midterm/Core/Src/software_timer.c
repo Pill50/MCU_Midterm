@@ -8,19 +8,19 @@
 #include "main.h"
 #include "software_timer.h"
 
-int timer0_counter;
+int timeout_counter;
 int blink_counter;
 int LED7_counter;
 int longpress_counter;
 
-int timer0_flag = 0;
+int timeout_flag = 0;
 int blink_flag = 0;
 int longpress_flag = 0;
 int LED7_flag = 0;
 
 void setTimer(int duration){
-	timer0_counter = duration/TIMER_CYCLE;
-	timer0_flag = 0;
+	timeout_counter = duration/TIMER_CYCLE;
+	timeout_flag = 0;
 }
 
 void setBlinkLedTimer(int duration){
@@ -40,9 +40,9 @@ void setLED7Timer(int duration){
 
 
 void timer_run(){
-	if (timer0_counter > 0){
-		timer0_counter--;
-		if (timer0_counter == 0) timer0_flag = 1;
+	if (timeout_counter > 0){
+		timeout_counter--;
+		if (timeout_counter == 0) timeout_flag = 1;
 	}
 	if (blink_counter > 0){
 		blink_counter--;

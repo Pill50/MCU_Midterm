@@ -100,7 +100,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   setBlinkLedTimer(1000);
   setLongpressTimer(3000);
-  setTimer(1000);
   while (1)
   {
 	  fsm_simple_buttons_run();
