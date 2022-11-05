@@ -1,0 +1,29 @@
+/*
+ * software_timer.h
+ *
+ *  Created on: Nov 3, 2022
+ *      Author: DELL
+ */
+
+#ifndef INC_SOFTWARE_TIMER_H_
+#define INC_SOFTWARE_TIMER_H_
+#include "global.h"
+
+#define TIMER_CYCLE 10;
+
+extern int timer0_flag;
+extern int led7_flag;
+extern int blink_flag;
+extern int longpress_flag;
+extern int doublepress_flag;
+extern int button_flag[N0_OF_BUTTONS];
+
+void setTimer(int duration);
+void setLed7Timer(int duration);
+void setBlinkLedTimer(int duration);
+void setLongpressTimer(int duration);
+void setDoublepressTimer(int duration);
+void setButtonTimer(int duration);
+void timer_run();
+
+#endif /* INC_SOFTWARE_TIMER_H_ */

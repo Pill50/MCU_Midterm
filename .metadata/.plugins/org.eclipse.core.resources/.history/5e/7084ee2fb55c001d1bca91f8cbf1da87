@@ -1,0 +1,18 @@
+/*
+ * global.h
+ *
+ *  Created on: Nov 5, 2022
+ *      Author: DELL
+ */
+
+#ifndef INC_GLOBAL_H_
+#define INC_GLOBAL_H_
+
+#define INIT 		1
+//#define RESET		2
+#define INC			3
+#define DEC			4
+
+extern int status;
+
+#endif /* INC_GLOBAL_H_ */

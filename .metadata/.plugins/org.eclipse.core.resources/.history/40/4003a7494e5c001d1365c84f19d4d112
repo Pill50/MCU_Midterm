@@ -1,0 +1,49 @@
+/*
+ * software_timer.c
+ *
+ *  Created on: Nov 3, 2022
+ *      Author: DELL
+ */
+
+#include "main.h"
+#include "software_timer.h"
+
+int timer0_counter;
+int led7_counter;
+int blink_counter;
+int longpress_counter;
+int doublepress_counter;
+
+int timer0_flag = 0;
+int longpress_flag = 0;
+int doublepress_flag = 0;
+
+void setTimer(int duration){
+	timer0_counter = duration/TIMER_CYCLE;
+	timer0_flag = 0;
+}
+
+void setLongpressTimer(int duration){
+	longpress_counter = duration/TIMER_CYCLE;
+	longpress_flag = 0;
+}
+
+void setDoublepressTimer(int duration) {
+	doublepress_counter = duration/TIMER_CYCLE;
+	doublepress_flag = 0;
+}
+
+void timer_run(){
+	if (timer0_counter > 0){
+		timer0_counter--;
+		if (timer0_counter == 0) timer0_flag = 1;
+	}
+	if (longpress_counter > 0){
+		longpress_counter--;
+		if (longpress_counter == 0) longpress_flag = 1;
+	}
+	if (doublepress_counter > 0){
+		doublepress_counter--;
+		if (doublepress_counter == 0) doublepress_flag = 1;
+	}
+}

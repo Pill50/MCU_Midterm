@@ -1,0 +1,14 @@
+/*
+ * global.h
+ *
+ *  Created on: Nov 4, 2022
+ *      Author: DELL
+ */
+
+#ifndef INC_GLOBAL_H_
+#define INC_GLOBAL_H_
+
+// we aim to work with more than one buttons
+#define N0_OF_BUTTONS 					3
+
+#endif /* INC_GLOBAL_H_ */
