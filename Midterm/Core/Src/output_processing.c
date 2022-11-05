@@ -6,147 +6,225 @@
  */
 
 #include "output_processing.h"
+#include "global.h"
 
-enum MODE { MODE_1 , MODE_2 , MODE_3 , MODE_4 } ;
-enum MODE Mode = MODE_1;
+int counter;
+static uint8_t button_flag[3] = {0,0,0};
 
-static uint8_t buttonflag0, buttonflag1, buttonflag2;
-
-int init = 0;
-void fsm_for_output_processing (void){
-	switch (Mode){
-	case MODE_1:
-		// BUTTON_0 PRESS
-		if (is_button_pressed(0) == 1){
-			if(buttonflag0 == 0) {
-				buttonflag0 = 1;
-				Mode = MODE_2;
+void fsm_simple_buttons_run (void){
+	switch (status){
+		case INIT:
+			status = _RESET;
+			counter = 0;
+			clearLED();
+			setLED7Timer(1000);
+			setTimer(10000);
+			break;
+		case _RESET:
+			// LED7 DISPLAY
+			if(LED7_flag == 1) {
+				displaySeg7(counter);
+				setLED7Timer(1000);
+			}
+			// BUTTON_RESET PRESS
+			if (is_button_pressed(0)){
+				if(button_flag[0] == 0) {
+					button_flag[0] = 1;
+					counter = 0;
+					status = _RESET;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[0] = 0;
+			}
+			// BUTTON_INC PRESS
+			if (is_button_pressed(1)){
+				if(button_flag[1] == 0) {
+					button_flag[1] = 1;
+					counter = (counter + 1) % 10;
+					displaySeg7(counter);
+					status = _INC;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[1] = 0;
+			}
+			// BUTTON_DEC PRESS
+			if (is_button_pressed(2)){
+				if(button_flag[2] == 0) {
+					button_flag[2] = 1;
+					counter--;
+					if(counter < 0) counter = 9;
+					displaySeg7(counter);
+					status = _DEC;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[2] = 0;
+			}
+			// IF DON'T DO ANYTHING AFTER 10S
+			if (timer0_flag == 1){
+				status = _AUTO_DEC;
+				displaySeg7(counter);
+				setTimer(10000);
+			}
+			break;
+		case _INC:
+			// LED7 DISPLAY
+			if(LED7_flag == 1) {
+				displaySeg7(counter);
+				setLED7Timer(1000);
+			}
+			// BUTTON_RESET PRESS
+			if (is_button_pressed(0)){
+				if(button_flag[0] == 0) {
+					button_flag[0] = 1;
+					counter = 0;
+					displaySeg7(counter);
+					status = _RESET;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[0] = 0;
+			}
+			// BUTTON_INC PRESS
+			if (is_button_pressed(1)){
+				// LONG PRESS
+				if(is_button_pressed_3s(1)) {
+					if(longpress_flag == 1) {
+						counter = (counter + 1) % 9;
+						displaySeg7(counter);
+						setLongpressTimer(1000);
+					}
+				}
+				// NORMAL PRESS
+				if(button_flag[1] == 0) {
+					counter = (counter + 1) % 10;
+					displaySeg7(counter);
+					button_flag[1] = 1;
+				}
+			} else {
+				button_flag[1] = 0;
+			}
+			// BUTTON_DEC PRESS
+			if (is_button_pressed(2)){
+				if(button_flag[2] == 0) {
+					button_flag[2] = 1;
+					counter--;
+					if(counter < 0) counter = 9;
+					displaySeg7(counter);
+					status = _DEC;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[2] = 0;
+			}
+			// SET_TIMER 10S IF DON'T PRESS
+			if (timer0_flag == 1){
+				status = _AUTO_DEC;
+				displaySeg7(counter);
 				setTimer(1000);
 			}
-		} else {
-			buttonflag0 = 0;
-		}
-		// SET_TIMER 1S IF DONT PRESS AND INIT LED_TRAFFIC
-		if (timer0_flag == 1){
-			if(init == 0) {
-				// turn off all led
-				init = 1;
+			break;
+		case _DEC:
+			// LED7 DISPLAY
+			if(LED7_flag == 1) {
+				displaySeg7(counter);
+				setLED7Timer(1000);
 			}
-			setTimer(1000);
-		}
-		break;
-	case MODE_2:
-		// BUTTON_1 PRESS
-		if (is_button_pressed(0)){
-			if(buttonflag0 == 0) {
-				buttonflag0 = 1;
-				Mode = MODE_3;
+			// BUTTON_RESET PRESS
+			if (is_button_pressed(0)){
+				if(button_flag[0] == 0) {
+					button_flag[0] = 1;
+					counter = 0;
+					displaySeg7(counter);
+					status = _RESET;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[0] = 0;
+			}
+			// BUTTON_INC PRESS
+			if (is_button_pressed(1)){
+				if(button_flag[1] == 0) {
+					button_flag[1] = 1;
+					counter = (counter + 1) % 10;
+					displaySeg7(counter);
+					status = _INC;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[1] = 0;
+			}
+			// BUTTON_DEC PRESS
+			if (is_button_pressed(2)){
+				// LONG PRESS
+				if(is_button_pressed_3s(2)) {
+					if(longpress_flag == 1) {
+						counter--;
+						if(counter < 0) counter = 9;
+						displaySeg7(counter);
+						setLongpressTimer(1000);
+					}
+				}
+				// NORMAL PRESS
+				if(button_flag[2] == 0) {
+					counter--;
+					if(counter < 0) counter = 9;
+					displaySeg7(counter);
+					button_flag[2] = 1;
+				}
+			} else {
+				button_flag[2] = 0;
+			}
+			// SET_TIMER 10S IF DON'T PRESS
+			if (timer0_flag == 1){
+				status = _AUTO_DEC;
+				displaySeg7(counter);
+				setTimer(10000);
+			}
+			break;
+		case _AUTO_DEC:
+			// LED7 DISPLAY
+			if(LED7_flag == 1) {
+				counter--;
+				if(counter < 0) counter = 0;
+				displaySeg7(counter);
+				setLED7Timer(1000);
+			}
+			// BUTTON_INC PRESS
+			if (is_button_pressed(1)){
+				if(button_flag[1] == 0) {
+					button_flag[1] = 1;
+					counter = (counter + 1) % 10;
+					displaySeg7(counter);
+					status = _INC;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[1] = 0;
+			}
+			// BUTTON_DEC PRESS
+			if (is_button_pressed(2)){
+				if(button_flag[2] == 0) {
+					button_flag[2] = 1;
+					counter--;
+					if(counter < 0) counter = 9;
+					displaySeg7(counter);
+					status = _DEC;
+					setTimer(10000);
+				}
+			} else {
+				button_flag[2] = 0;
+			}
+			if(timer0_flag == 1) {
+				status = _AUTO_DEC;
 				setTimer(1000);
 			}
-		} else {
-			buttonflag0 = 0;
-		}
-		// BUTTON_1 PRESS
-		if (is_button_pressed(1)){
-			if(is_button_pressed_1s(1)) {
-
-			}
-			if(buttonflag1 == 0) {
-
-			}
-		} else buttonflag1 = 0;
-		// BUTTON_2 PRESS
-		if (is_button_pressed(2)){
-			if(is_button_pressed_1s(2)) {
-
-			}
-			if(buttonflag2 == 0) {
-				buttonflag2 = 1;
-
-			}
-		} else {
-			buttonflag2 = 0;
-		}
-		// SET_TIMER 1S IF DONT PRESS
-		if (timer0_flag == 1){
-			setTimer(1000);
-		}
-		break;
-	case MODE_3:
-		// BUTTON_0 PRESS
-		if (is_button_pressed(0)){
-			if(buttonflag0 == 0) {
-				buttonflag0 = 1;
-				Mode = MODE_4;
-				setTimer(1000);
-			}
-		} else {
-			buttonflag0 = 0;
-		}
-		// BUTTON_1 PRESS
-		if (is_button_pressed(1)){
-			if(is_button_pressed_1s(1)) {
-
-			}
-			if(buttonflag1 == 0) {
-
-			}
-		} else buttonflag1 = 0;
-		// BUTTON_2 PRESS
-		if (is_button_pressed(2)){
-			if(is_button_pressed_1s(2)) {
-
-			}
-			if(buttonflag2 == 0) {
-				buttonflag2 = 1;
-
-			}
-		} else {
-			buttonflag2 = 0;
-		}
-		// SET_TIMER 1S IF DONT PRESS
-		if (timer0_flag == 1){
-			setTimer(1000);
-		}
-		break;
-	case MODE_4:
-		// BUTTON_0 PRESS
-		if (is_button_pressed(0)){
-			if(buttonflag0 == 0) {
-				buttonflag0 = 1;
-				Mode = MODE_1;
-				setTimer(1000);
-			}
-		} else {
-			buttonflag0 = 0;
-		}
-		// BUTTON_1 PRESS
-		if (is_button_pressed(1)){
-			if(is_button_pressed_1s(1)) {
-
-			}
-			if(buttonflag1 == 0) {
-
-			}
-		} else buttonflag1 = 0;
-		// BUTTON_2 PRESS
-		if (is_button_pressed(2)){
-			if(is_button_pressed_1s(2)) {
-
-			}
-			if(buttonflag2 == 0) {
-				buttonflag2 = 1;
-
-			}
-		} else {
-			buttonflag2 = 0;
-		}
-		// SET_TIMER 1S IF DONT PRESS
-		if (timer0_flag == 1){
-			setTimer(1000);
-		}
-		break;
-	default:
-		Mode = MODE_1;
+			break;
+		default:
+			status = INIT;
+			break;
 	}
 }
+
