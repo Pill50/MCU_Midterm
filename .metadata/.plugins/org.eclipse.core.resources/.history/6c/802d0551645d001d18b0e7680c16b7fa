@@ -98,14 +98,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setBlinkLedTimer(500);
+  setBlinkLedTimer(1000);
   setLongpressTimer(3000);
   while (1)
   {
 	  fsm_simple_buttons_run();
 	  if(blink_flag == 1) {
 		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-		  setBlinkLedTimer(500);
+		  setBlinkLedTimer(1000);
 	  }
     /* USER CODE END WHILE */
 

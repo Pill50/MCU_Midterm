@@ -105,7 +105,7 @@ int main(void)
 	  fsm_simple_buttons_run();
 	  if(blink_flag == 1) {
 		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-		  setBlinkLedTimer(500);
+		  setBlinkLedTimer(1000);
 	  }
     /* USER CODE END WHILE */
 
