@@ -9,46 +9,43 @@ string suffixWithUnit(double number)
         string suffix[9] = {" ", " Kilo", " Mega", " Giga", " Tera", " Peta", " Exa", " Zetta", " Yotta"};
         string res = "";
         // store decimal after div 1000
-        string newDec;
-        // temporary variable to process
+        string newDecimal;
+        // temporary variable to process avoid modify in "number"
         double tmp = number;
         int counter = 0;
         while (tmp >= 1000)
         {
-                tmp = tmp / 1000;
                 counter++;
-                // get decimal value
+                tmp = tmp / 1000;
                 double decimal = tmp - int(tmp);
-                // erase "0."
-                string dec = to_string(decimal).substr(2);
-                // erase all trailing zeros
-                dec.erase(dec.find_last_not_of('0') + 1);
-                newDec = dec + newDec;
                 tmp = (int)tmp;
+                // delete "0."
+                string dec = to_string(decimal).substr(2);
+                // delete all 0: Ex after 3 "123000"
+                dec.erase(dec.find_last_not_of('0') + 1);
+                newDecimal = dec + newDecimal;
         }
         if (counter == 0)
         {
-                // get realpart
                 int realpart = (int)tmp;
-                // get decimal
                 double decimal = tmp - (int)tmp;
-                // erase "0."
-                string dec = to_string(decimal).substr(2);
-                // erase all trailing zeros
-                dec.erase(dec.find_last_not_of('0') + 1);
-                newDec = dec + newDec;
+                // deleta "0."
+                string deci = to_string(decimal).substr(2);
+                // delete all 0: Ex after 3 "123000"
+                deci.erase(deci.find_last_not_of('0') + 1);
+                newDecimal = deci + newDecimal;
                 res = to_string(realpart);
-                if (newDec.length() != 0)
-                        res = res + "." + newDec;
+                if (newDecimal.length() != 0)
+                        res = res + "." + newDecimal;
         }
         else
         {
                 // get realpart value
                 int realpart = (int)tmp;
                 res = to_string(realpart);
-                if (newDec.length() != 0)
-                { // add "."
-                        res = res + "." + newDec;
+                if (newDecimal.length() != 0)
+                {
+                        res = res + "." + newDecimal;
                 }
                 res = res + suffix[counter];
         }
@@ -57,6 +54,6 @@ string suffixWithUnit(double number)
 
 int main()
 {
-        string s = suffixWithUnit(123.456);
+        string s = suffixWithUnit(1234.56);
         cout << s;
 }
