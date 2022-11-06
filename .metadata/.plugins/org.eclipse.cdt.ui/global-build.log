@@ -1,19 +1,19 @@
-06:49:16 **** Incremental Build of configuration Debug for project Midterm ****
+07:44:05 **** Incremental Build of configuration Debug for project Midterm ****
 make -j4 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103x6 -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/output_processing.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103x6 -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/output_processing.d" -MT"Core/Src/output_processing.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/output_processing.o"
 arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m3 -T"E:\Midterm\Midterm\STM32F103C6UX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: Midterm.elf
  
 arm-none-eabi-size   Midterm.elf 
 arm-none-eabi-objdump -h -S  Midterm.elf  > "Midterm.list"
 arm-none-eabi-objcopy  -O ihex  Midterm.elf  "Midterm.hex"
+arm-none-eabi-objcopy  -O binary  Midterm.elf  "Midterm.bin"
    text	   data	    bss	    dec	    hex	filename
   10120	     28	   1708	  11856	   2e50	Midterm.elf
-arm-none-eabi-objcopy  -O binary  Midterm.elf  "Midterm.bin"
 Finished building: default.size.stdout
  
-Finished building: Midterm.bin
 Finished building: Midterm.hex
+Finished building: Midterm.bin
  
  
 Finished building: Midterm.list

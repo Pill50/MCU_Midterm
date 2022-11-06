@@ -1818,8 +1818,8 @@ void fsm_simple_buttons_run (void){
  8000c90:	681b      	ldr	r3, [r3, #0]
  8000c92:	4618      	mov	r0, r3
  8000c94:	f7ff fb52 	bl	800033c <display7SEG>
-				setTimer(10000);
- 8000c98:	f242 7010 	movw	r0, #10000	; 0x2710
+				setTimer(1000);
+ 8000c98:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
  8000c9c:	f000 f8b4 	bl	8000e08 <setTimer>
 			}
 			break;

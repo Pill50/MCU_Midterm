@@ -164,7 +164,7 @@ void fsm_simple_buttons_run (void){
 			if (timeout_flag == 1){
 				status = _AUTO_DEC;
 				display7SEG(counter);
-				setTimer(10000);
+				setTimer(1000);
 			}
 			break;
 		case _AUTO_DEC:
